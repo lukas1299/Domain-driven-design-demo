@@ -6,6 +6,7 @@ import com.example.manufacturing_order.domain.model.order.ManufacturingOrder;
 import com.example.manufacturing_order.domain.model.order.MaterialRequirement;
 import com.example.manufacturing_order.domain.model.stock.InsufficientMaterialStockException;
 import com.example.manufacturing_order.domain.model.stock.MaterialStock;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -13,17 +14,10 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class StartManufacturingOrderHandler {
+@RequiredArgsConstructor
+public class StartManufacturingOrderService {
     private final ManufacturingOrderRepositoryPort manufacturingOrderRepositoryPort;
     private final MaterialStockRepositoryPort materialStockRepositoryPort;
-
-    public StartManufacturingOrderHandler(
-            ManufacturingOrderRepositoryPort manufacturingOrderRepositoryPort,
-            MaterialStockRepositoryPort materialStockRepositoryPort
-    ) {
-        this.manufacturingOrderRepositoryPort = manufacturingOrderRepositoryPort;
-        this.materialStockRepositoryPort = materialStockRepositoryPort;
-    }
 
     @Transactional
     public void handle() {

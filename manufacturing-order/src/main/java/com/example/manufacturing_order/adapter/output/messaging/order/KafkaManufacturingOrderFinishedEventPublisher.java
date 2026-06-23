@@ -4,15 +4,12 @@ import com.example.common.messaging.order.ManufacturingOrderFinishedEventPayload
 import com.example.common.messaging.order.ManufacturingOrderKafkaTopics;
 import com.example.manufacturing_order.domain.model.order.ManufacturingOrder;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import tools.jackson.databind.ObjectMapper;
 
 @Slf4j
 public class KafkaManufacturingOrderFinishedEventPublisher implements ManufacturingOrderFinishedEventPublisherPort {
 
-    private static final Logger log = LoggerFactory.getLogger(KafkaManufacturingOrderFinishedEventPublisher.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 

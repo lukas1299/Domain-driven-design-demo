@@ -26,7 +26,7 @@ public class ManufacturingOrderScheduler {
 
         try {
             ResponseEntity<Void> response = restClient.post()
-                    .uri("/api/manufacturing-orders/start")
+                    .uri("/v1/manufacturing-orders/start")
                     .retrieve()
                     .toEntity(Void.class);
 
@@ -39,7 +39,7 @@ public class ManufacturingOrderScheduler {
             Thread.sleep(3000);
 
             ResponseEntity<Void> finishResponse = restClient.post()
-                    .uri("/api/manufacturing-orders/finish")
+                    .uri("/v1/manufacturing-orders/finish")
                     .retrieve()
                     .toEntity(Void.class);
 

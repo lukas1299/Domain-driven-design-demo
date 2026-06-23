@@ -1,4 +1,4 @@
-package com.example.manufacturing_order.domain.model.bom;
+package com.example.manufacturing_order.domain.model.billOfMaterials;
 
 public class BillOfMaterialsNotFoundException extends RuntimeException {
     public BillOfMaterialsNotFoundException(String productSku) {

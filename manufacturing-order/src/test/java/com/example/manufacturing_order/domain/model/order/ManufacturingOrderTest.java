@@ -1,5 +1,6 @@
 package com.example.manufacturing_order.domain.model.order;
 
+import com.example.common.validator.RuleValidationException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,13 +28,13 @@ class ManufacturingOrderTest {
     @Test
     void createNew_shouldValidateInput() {
         assertThatThrownBy(() -> ManufacturingOrder.createNew(null, "PRODUCT-1", 1, REQUIREMENTS))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(RuleValidationException.class);
         assertThatThrownBy(() -> ManufacturingOrder.createNew("order-1", "  ", 1, REQUIREMENTS))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(RuleValidationException.class);
         assertThatThrownBy(() -> ManufacturingOrder.createNew("order-1", "PRODUCT-1", 0, REQUIREMENTS))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(RuleValidationException.class);
         assertThatThrownBy(() -> ManufacturingOrder.createNew("order-1", "PRODUCT-1", 1, List.of()))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(RuleValidationException.class);
     }
 
     @Test

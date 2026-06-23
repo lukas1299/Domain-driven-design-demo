@@ -7,6 +7,5 @@ import java.util.UUID;
 
 public interface UpdateCustomerOrderRepositoryPort {
     Optional<CustomerOrder> findById(UUID id);
-
     void save(CustomerOrder order);
 }

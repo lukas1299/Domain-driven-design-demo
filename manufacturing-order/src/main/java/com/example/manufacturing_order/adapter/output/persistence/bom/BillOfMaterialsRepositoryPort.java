@@ -1,6 +1,6 @@
 package com.example.manufacturing_order.adapter.output.persistence.bom;
 
-import com.example.manufacturing_order.domain.model.bom.BillOfMaterials;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BillOfMaterials;
 
 import java.util.Optional;
 

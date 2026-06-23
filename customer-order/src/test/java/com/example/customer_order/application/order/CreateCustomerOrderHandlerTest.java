@@ -30,15 +30,13 @@ class CreateCustomerOrderHandlerTest {
     private ProductAvailabilityPort productAvailabilityPort;
 
     @InjectMocks
-    private CreateCustomerOrderHandler handler;
+    private CreateCustomerOrderService service;
 
     @Test
     void handle_shouldCreateOrderWhenProductAvailable() {
         UUID customerId = UUID.randomUUID();
         when(productAvailabilityPort.isProductAvailable("SKU-1")).thenReturn(true);
-
-        UUID orderId = handler.handle(new CreateCustomerOrderCommand(customerId.toString(), "SKU-1", 3));
-
+        UUID orderId = service.handle(new CreateCustomerOrderCommand(customerId.toString(), "SKU-1", 3));
         ArgumentCaptor<CustomerOrder> captor = ArgumentCaptor.forClass(CustomerOrder.class);
         verify(repositoryPort).save(captor.capture());
         assertThat(captor.getValue().getId().value()).isEqualTo(orderId);
@@ -49,10 +47,8 @@ class CreateCustomerOrderHandlerTest {
     @Test
     void handle_shouldThrowWhenProductNotAvailable() {
         when(productAvailabilityPort.isProductAvailable("SKU-1")).thenReturn(false);
-
-        assertThatThrownBy(() -> handler.handle(new CreateCustomerOrderCommand(UUID.randomUUID().toString(), "SKU-1", 3)))
+        assertThatThrownBy(() -> service.handle(new CreateCustomerOrderCommand(UUID.randomUUID().toString(), "SKU-1", 3)))
                 .isInstanceOf(ProductNotAvailableException.class);
-
         verify(repositoryPort, never()).save(any());
     }
 }

@@ -33,7 +33,6 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     producer:
-      # Automatycznie zamieni Twój obiekt/rekord Java na tekstowy format JSON
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 springdoc:

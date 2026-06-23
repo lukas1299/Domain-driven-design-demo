@@ -8,14 +8,10 @@ import com.example.manufacturing_order.adapter.output.persistence.bom.SpringData
 import com.example.manufacturing_order.adapter.output.persistence.order.ManufacturingOrderRepositoryAdapter;
 import com.example.manufacturing_order.adapter.output.persistence.order.ManufacturingOrderRepositoryPort;
 import com.example.manufacturing_order.adapter.output.persistence.order.SpringDataManufacturingOrderRepository;
+import com.example.manufacturing_order.adapter.output.persistence.stock.DataMaterialStockRepository;
 import com.example.manufacturing_order.adapter.output.persistence.stock.MaterialStockRepositoryAdapter;
 import com.example.manufacturing_order.adapter.output.persistence.stock.MaterialStockRepositoryPort;
-import com.example.manufacturing_order.adapter.output.persistence.stock.SpringDataMaterialStockRepository;
-import com.example.manufacturing_order.application.order.CancelManufacturingOrderHandler;
-import com.example.manufacturing_order.application.order.CheckManufacturingOrderStatusHandler;
-import com.example.manufacturing_order.application.order.CreateManufacturingOrderHandler;
-import com.example.manufacturing_order.application.order.FinishManufacturingOrderHandler;
-import com.example.manufacturing_order.application.order.StartManufacturingOrderHandler;
+import com.example.manufacturing_order.application.order.*;
 import com.example.manufacturing_order.application.product.CheckProductAvailabilityHandler;
 import com.example.manufacturing_order.application.product.CheckProductAvailabilityPort;
 import org.springframework.context.annotation.Bean;
@@ -39,15 +35,15 @@ public class ManufacturingOrderConfig {
     }
 
     @Bean
-    public CreateManufacturingOrderHandler createManufacturingOrderHandler(
+    public CreateManufacturingOrderService createManufacturingOrderService(
             ManufacturingOrderRepositoryPort repositoryPort,
             BillOfMaterialsRepositoryPort billOfMaterialsRepositoryPort
     ) {
-        return new CreateManufacturingOrderHandler(repositoryPort, billOfMaterialsRepositoryPort);
+        return new CreateManufacturingOrderService(repositoryPort, billOfMaterialsRepositoryPort);
     }
 
     @Bean
-    public MaterialStockRepositoryPort materialStockRepositoryPort(SpringDataMaterialStockRepository stockRepository) {
+    public MaterialStockRepositoryPort materialStockRepositoryPort(DataMaterialStockRepository stockRepository) {
         return new MaterialStockRepositoryAdapter(stockRepository);
     }
 
@@ -60,11 +56,11 @@ public class ManufacturingOrderConfig {
     }
 
     @Bean
-    public StartManufacturingOrderHandler startManufacturingOrderHandler(
+    public StartManufacturingOrderService startManufacturingOrderHandler(
             ManufacturingOrderRepositoryPort manufacturingOrderRepositoryPort,
             MaterialStockRepositoryPort materialStockRepositoryPort
     ) {
-        return new StartManufacturingOrderHandler(manufacturingOrderRepositoryPort, materialStockRepositoryPort);
+        return new StartManufacturingOrderService(manufacturingOrderRepositoryPort, materialStockRepositoryPort);
     }
 
     @Bean
@@ -75,10 +71,10 @@ public class ManufacturingOrderConfig {
     }
 
     @Bean
-    public CancelManufacturingOrderHandler cancelManufacturingOrderHandler(
+    public CancelManufacturingOrderService cancelManufacturingOrderHandler(
             ManufacturingOrderRepositoryPort manufacturingOrderRepositoryPort
     ) {
-        return new CancelManufacturingOrderHandler(manufacturingOrderRepositoryPort);
+        return new CancelManufacturingOrderService(manufacturingOrderRepositoryPort);
     }
 
     @Bean

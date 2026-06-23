@@ -15,7 +15,7 @@ class CustomerOrderTest {
 
     @Test
     void createNew_shouldCreatePlacedOrder() {
-        CustomerOrder order = CustomerOrder.createNew(OrderId.generate(), CUSTOMER_ID, "SKU-1", 3);
+        CustomerOrder order = CustomerOrder.createNew(CUSTOMER_ID, "SKU-1", 3);
 
         assertThat(order.getStatus()).isEqualTo(OrderStatus.PLACED);
         assertThat(order.getProductSku()).isEqualTo("SKU-1");
@@ -25,7 +25,7 @@ class CustomerOrderTest {
 
     @Test
     void createNew_shouldRejectNonPositiveQuantity() {
-        assertThatThrownBy(() -> CustomerOrder.createNew(OrderId.generate(), CUSTOMER_ID, "SKU-1", 0))
+        assertThatThrownBy(() -> CustomerOrder.createNew(CUSTOMER_ID, "SKU-1", 0))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Quantity");
     }
@@ -116,7 +116,7 @@ class CustomerOrderTest {
     }
 
     private CustomerOrder placedOrder() {
-        return CustomerOrder.reconstruct(
+        return CustomerOrder.of(
                 OrderId.generate(),
                 CUSTOMER_ID,
                 "SKU-1",
@@ -126,7 +126,7 @@ class CustomerOrderTest {
     }
 
     private CustomerOrder paidOrder() {
-        return CustomerOrder.reconstruct(
+        return CustomerOrder.of(
                 OrderId.generate(),
                 CUSTOMER_ID,
                 "SKU-1",

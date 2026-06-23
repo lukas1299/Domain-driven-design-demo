@@ -1,6 +1,9 @@
 server:
   port: 8082
 spring:
+  mvc:
+    pathmatch:
+      api-prefix: /api
   application:
     name: manufacturing-order
 
@@ -34,8 +37,11 @@ spring:
 springdoc:
   api-docs:
     path: /api-docs
+    enabled: true
   swagger-ui:
     path: /swagger-ui.html
+    disable-swagger-default-url: true
     operationsSorter: method
     tagsSorter: alpha
     defaultModelsExpandDepth: 1
+  show-actuator: false

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -25,20 +24,17 @@ class CancelOrderHandlerTest {
     @Mock
     private CancelCustomerOrderPort cancelCustomerOrderPort;
 
-    @Mock
-    private KafkaTemplate<String, String> kafkaTemplate;
-
-    private CancelOrderHandler handler;
+    private CancelOrderService cancelOrderService;
 
     @BeforeEach
     void setUp() {
-        handler = new CancelOrderHandler(cancelCustomerOrderPort, kafkaTemplate);
+        cancelOrderService = new CancelOrderService(cancelCustomerOrderPort);
     }
 
     @Test
     void handle_shouldCancelOrder() {
         UUID orderId = UUID.randomUUID();
-        CustomerOrder order = CustomerOrder.reconstruct(
+        CustomerOrder order = CustomerOrder.of(
                 OrderId.of(orderId),
                 UUID.randomUUID().toString(),
                 "SKU-1",
@@ -47,9 +43,9 @@ class CancelOrderHandlerTest {
         );
         when(cancelCustomerOrderPort.findById(orderId)).thenReturn(Optional.of(order));
 
-        handler.handle(new CancelOrderCommand(orderId));
+        cancelOrderService.handle(new CancelOrderCommand(orderId));
 
-        verify(cancelCustomerOrderPort).cancel(orderId);
+        verify(cancelCustomerOrderPort).cancel(order);
     }
 
     @Test
@@ -57,7 +53,7 @@ class CancelOrderHandlerTest {
         UUID orderId = UUID.randomUUID();
         when(cancelCustomerOrderPort.findById(orderId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> handler.handle(new CancelOrderCommand(orderId)))
+        assertThatThrownBy(() -> cancelOrderService.handle(new CancelOrderCommand(orderId)))
                 .isInstanceOf(CustomerOrderNotFoundException.class);
     }
 }

@@ -1,13 +1,13 @@
 package com.example.manufacturing_order.domain.model.stock;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class MaterialStock {
     private final String materialSku;
     private int quantity;
-
-    private MaterialStock(String materialSku, int quantity) {
-        this.materialSku = materialSku;
-        this.quantity = quantity;
-    }
 
     public static MaterialStock createNew(String materialSku, int initialQuantity) {
         if (materialSku == null || materialSku.isBlank()) {
@@ -19,7 +19,7 @@ public class MaterialStock {
         return new MaterialStock(materialSku, initialQuantity);
     }
 
-    public static MaterialStock reconstitute(String materialSku, int quantity) {
+    public static MaterialStock of(String materialSku, int quantity) {
         return new MaterialStock(materialSku, quantity);
     }
 
@@ -37,11 +37,4 @@ public class MaterialStock {
         return amount > 0 && quantity >= amount;
     }
 
-    public String getMaterialSku() {
-        return materialSku;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
 }

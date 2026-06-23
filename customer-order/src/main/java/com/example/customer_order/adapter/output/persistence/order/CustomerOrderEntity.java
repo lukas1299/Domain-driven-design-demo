@@ -9,7 +9,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "customer_orders")
 public class CustomerOrderEntity {
-    @Id private UUID id;
+    @Id
+    private UUID id;
     private String customerId;
     private String productSku;
     private int quantity;

@@ -4,6 +4,7 @@ import com.example.manufacturing_order.adapter.output.persistence.order.Manufact
 import com.example.manufacturing_order.domain.model.order.ManufacturingOrder;
 import com.example.manufacturing_order.domain.model.order.ManufacturingStatus;
 import com.example.manufacturing_order.domain.model.order.MaterialRequirement;
+import com.example.manufacturing_order.domain.model.order.exception.ManufacturingOrderNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -29,7 +30,7 @@ class CancelManufacturingOrderHandlerTest {
     private ManufacturingOrderRepositoryPort manufacturingOrderRepositoryPort;
 
     @InjectMocks
-    private CancelManufacturingOrderHandler handler;
+    private CancelManufacturingOrderService service;
 
     @Test
     void handle_shouldCancelPendingOrder() {
@@ -43,7 +44,7 @@ class CancelManufacturingOrderHandlerTest {
         when(manufacturingOrderRepositoryPort.findBySourceOrderId(sourceOrderId.toString()))
                 .thenReturn(Optional.of(order));
 
-        handler.handle(sourceOrderId);
+        service.handle(sourceOrderId);
 
         ArgumentCaptor<ManufacturingOrder> captor = ArgumentCaptor.forClass(ManufacturingOrder.class);
         verify(manufacturingOrderRepositoryPort).save(captor.capture());
@@ -56,8 +57,8 @@ class CancelManufacturingOrderHandlerTest {
         when(manufacturingOrderRepositoryPort.findBySourceOrderId(sourceOrderId.toString()))
                 .thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> handler.handle(sourceOrderId))
-                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> service.handle(sourceOrderId))
+                .isInstanceOf(ManufacturingOrderNotFoundException.class);
 
         verify(manufacturingOrderRepositoryPort, never()).save(any());
     }

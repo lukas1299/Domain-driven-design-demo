@@ -6,7 +6,6 @@ public record OrderId(UUID value) {
     public static OrderId generate() {
         return new OrderId(UUID.randomUUID());
     }
-
     public static OrderId of(UUID id) {
         return new OrderId(id);
     }

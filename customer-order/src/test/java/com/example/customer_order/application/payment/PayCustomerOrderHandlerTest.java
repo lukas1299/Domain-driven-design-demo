@@ -1,6 +1,6 @@
 package com.example.customer_order.application.payment;
 
-import com.example.customer_order.adapter.output.outbox.SpringCustomerOrderEventPublisher;
+import com.example.customer_order.adapter.output.outbox.CustomerOrderEventPublisher;
 import com.example.customer_order.adapter.output.persistence.payment.PayCustomerOrderRepositoryPort;
 import com.example.customer_order.domain.model.order.CustomerOrder;
 import com.example.customer_order.domain.model.order.OrderId;
@@ -29,10 +29,10 @@ class PayCustomerOrderHandlerTest {
     private PayCustomerOrderRepositoryPort repositoryPort;
 
     @Mock
-    private SpringCustomerOrderEventPublisher publisher;
+    private CustomerOrderEventPublisher publisher;
 
     @InjectMocks
-    private PayCustomerOrderHandler handler;
+    private PayCustomerOrderService service;
 
     @Test
     void handle_shouldPayOrderAndPublishEvent() {
@@ -40,7 +40,7 @@ class PayCustomerOrderHandlerTest {
         CustomerOrder order = placedOrder(orderId);
         when(repositoryPort.findById(orderId)).thenReturn(Optional.of(order));
 
-        handler.handle(new PayCustomerOrderCommand(orderId));
+        service.handle(new PayCustomerOrderCommand(orderId));
 
         verify(repositoryPort).save(order);
         verify(publisher).publishOrderPaid(order);
@@ -51,7 +51,7 @@ class PayCustomerOrderHandlerTest {
         UUID orderId = UUID.randomUUID();
         when(repositoryPort.findById(orderId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> handler.handle(new PayCustomerOrderCommand(orderId)))
+        assertThatThrownBy(() -> service.handle(new PayCustomerOrderCommand(orderId)))
                 .isInstanceOf(CustomerOrderNotFoundException.class);
 
         verify(repositoryPort, never()).save(any());
@@ -61,7 +61,7 @@ class PayCustomerOrderHandlerTest {
     @Test
     void handle_shouldThrowWhenOrderAlreadyPaid() {
         UUID orderId = UUID.randomUUID();
-        CustomerOrder order = CustomerOrder.reconstruct(
+        CustomerOrder order = CustomerOrder.of(
                 OrderId.of(orderId),
                 UUID.randomUUID().toString(),
                 "SKU-1",
@@ -70,7 +70,7 @@ class PayCustomerOrderHandlerTest {
         );
         when(repositoryPort.findById(orderId)).thenReturn(Optional.of(order));
 
-        assertThatThrownBy(() -> handler.handle(new PayCustomerOrderCommand(orderId)))
+        assertThatThrownBy(() -> service.handle(new PayCustomerOrderCommand(orderId)))
                 .isInstanceOf(InvalidOrderStatusException.class);
 
         verify(repositoryPort, never()).save(any());
@@ -78,7 +78,7 @@ class PayCustomerOrderHandlerTest {
     }
 
     private CustomerOrder placedOrder(UUID orderId) {
-        return CustomerOrder.reconstruct(
+        return CustomerOrder.of(
                 OrderId.of(orderId),
                 UUID.randomUUID().toString(),
                 "SKU-1",

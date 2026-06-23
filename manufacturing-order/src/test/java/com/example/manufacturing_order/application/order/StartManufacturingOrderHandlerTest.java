@@ -34,7 +34,7 @@ class StartManufacturingOrderHandlerTest {
     private MaterialStockRepositoryPort materialStockRepositoryPort;
 
     @InjectMocks
-    private StartManufacturingOrderHandler handler;
+    private StartManufacturingOrderService service;
 
     @Test
     void handle_shouldStartProductionWhenStockIsSufficient() {
@@ -49,7 +49,7 @@ class StartManufacturingOrderHandlerTest {
         when(manufacturingOrderRepositoryPort.findFirstPending()).thenReturn(Optional.of(order));
         when(materialStockRepositoryPort.findByMaterialSkus(List.of("SEMI-1"))).thenReturn(List.of(stock));
 
-        handler.handle();
+        service.handle();
 
         assertThat(order.getStatus()).isEqualTo(ManufacturingStatus.IN_PROGRESS);
         assertThat(stock.getQuantity()).isEqualTo(6);
@@ -61,7 +61,7 @@ class StartManufacturingOrderHandlerTest {
     void handle_shouldThrowWhenNoPendingOrder() {
         when(manufacturingOrderRepositoryPort.findFirstPending()).thenReturn(Optional.empty());
 
-        assertThatThrownBy(handler::handle)
+        assertThatThrownBy(service::handle)
                 .isInstanceOf(IllegalArgumentException.class);
 
         verify(materialStockRepositoryPort, never()).save(any());
@@ -78,7 +78,7 @@ class StartManufacturingOrderHandlerTest {
         when(manufacturingOrderRepositoryPort.findFirstPending()).thenReturn(Optional.of(order));
         when(materialStockRepositoryPort.findByMaterialSkus(List.of("SEMI-1"))).thenReturn(List.of());
 
-        assertThatThrownBy(handler::handle)
+        assertThatThrownBy(service::handle)
                 .isInstanceOf(InsufficientMaterialStockException.class);
 
         verify(manufacturingOrderRepositoryPort, never()).save(any());

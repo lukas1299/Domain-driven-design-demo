@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface CancelCustomerOrderPort {
     Optional<CustomerOrder> findById(UUID orderId);
-    void cancel(UUID orderId);
+    void cancel(CustomerOrder order);
 }

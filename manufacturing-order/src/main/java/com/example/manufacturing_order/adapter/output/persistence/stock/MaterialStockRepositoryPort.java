@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface MaterialStockRepositoryPort {
     MaterialStock save(MaterialStock materialStock);
-    Optional<MaterialStock> findByMaterialSku(String materialSku);
     List<MaterialStock> findByMaterialSkus(Collection<String> materialSkus);
 }

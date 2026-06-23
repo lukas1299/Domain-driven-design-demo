@@ -55,7 +55,7 @@ class DeleteCustomerOrderHandlerTest {
     @Test
     void handle_shouldThrowWhenOrderNotDeletable() {
         UUID orderId = UUID.randomUUID();
-        CustomerOrder order = CustomerOrder.reconstruct(
+        CustomerOrder order = CustomerOrder.of(
                 OrderId.of(orderId),
                 UUID.randomUUID().toString(),
                 "SKU-1",
@@ -71,7 +71,7 @@ class DeleteCustomerOrderHandlerTest {
     }
 
     private CustomerOrder placedOrder(UUID orderId) {
-        return CustomerOrder.reconstruct(
+        return CustomerOrder.of(
                 OrderId.of(orderId),
                 UUID.randomUUID().toString(),
                 "SKU-1",

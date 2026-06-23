@@ -3,8 +3,8 @@ package com.example.manufacturing_order.application.product;
 import com.example.common.api.product.ProductAvailabilityResponse;
 import com.example.manufacturing_order.adapter.output.persistence.bom.BillOfMaterialsRepositoryPort;
 import com.example.manufacturing_order.adapter.output.persistence.stock.MaterialStockRepositoryPort;
-import com.example.manufacturing_order.domain.model.bom.BillOfMaterials;
-import com.example.manufacturing_order.domain.model.bom.BomLine;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BillOfMaterials;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BomLine;
 import com.example.manufacturing_order.domain.model.stock.MaterialStock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class CheckProductAvailabilityHandlerTest {
     void check_shouldReturnFalseWhenBomNotFound() {
         when(billOfMaterialsRepositoryPort.findByProductSku("UNKNOWN")).thenReturn(Optional.empty());
 
-        ProductAvailabilityResponse response = handler.check("UNKNOWN");
+        ProductAvailabilityResponse response = handler.checkSubProductsAvailability("UNKNOWN");
 
         assertThat(response.available()).isFalse();
         assertThat(response.productSku()).isEqualTo("UNKNOWN");
@@ -47,7 +47,7 @@ class CheckProductAvailabilityHandlerTest {
         when(materialStockRepositoryPort.findByMaterialSkus(List.of("SEMI-1")))
                 .thenReturn(List.of(MaterialStock.createNew("SEMI-1", 10)));
 
-        ProductAvailabilityResponse response = handler.check("PRODUCT-1");
+        ProductAvailabilityResponse response = handler.checkSubProductsAvailability("PRODUCT-1");
 
         assertThat(response.available()).isTrue();
     }
@@ -59,7 +59,7 @@ class CheckProductAvailabilityHandlerTest {
         when(materialStockRepositoryPort.findByMaterialSkus(List.of("SEMI-1")))
                 .thenReturn(List.of(MaterialStock.createNew("SEMI-1", 2)));
 
-        ProductAvailabilityResponse response = handler.check("PRODUCT-1");
+        ProductAvailabilityResponse response = handler.checkSubProductsAvailability("PRODUCT-1");
 
         assertThat(response.available()).isFalse();
     }

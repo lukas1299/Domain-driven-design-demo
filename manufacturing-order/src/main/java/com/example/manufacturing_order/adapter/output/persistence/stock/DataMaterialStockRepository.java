@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Collection;
 import java.util.List;
 
-public interface SpringDataMaterialStockRepository extends JpaRepository<MaterialStockEntity, String> {
+public interface DataMaterialStockRepository extends JpaRepository<MaterialStockEntity, String> {
     List<MaterialStockEntity> findByMaterialSkuIn(Collection<String> materialSkus);
 }

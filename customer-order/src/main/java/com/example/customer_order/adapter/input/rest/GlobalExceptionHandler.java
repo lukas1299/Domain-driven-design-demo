@@ -26,6 +26,4 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleManufacturingUnavailable(ManufacturingServiceUnavailableException exception) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(exception.getMessage());
     }
-
-
 }

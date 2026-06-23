@@ -1,21 +1,21 @@
 package com.example.customer_order.config;
 
+import com.example.customer_order.adapter.input.rest.order.CreateCustomerOrderController;
 import com.example.customer_order.adapter.output.manufacturing.ProductAvailabilityPort;
-import com.example.customer_order.adapter.output.outbox.SpringCustomerOrderEventPublisher;
+import com.example.customer_order.adapter.output.outbox.CustomerOrderEventPublisher;
 import com.example.customer_order.adapter.output.persistence.cancel.CancelCustomerOrderPort;
 import com.example.customer_order.adapter.output.persistence.order.CustomerOrderRepositoryPort;
 import com.example.customer_order.adapter.output.persistence.order.DeleteCustomerOrderRepositoryPort;
 import com.example.customer_order.adapter.output.persistence.order.UpdateCustomerOrderRepositoryPort;
 import com.example.customer_order.adapter.output.persistence.payment.PayCustomerOrderRepositoryPort;
-import com.example.customer_order.application.cancel.CancelOrderHandler;
-import com.example.customer_order.application.order.CreateCustomerOrderHandler;
+import com.example.customer_order.application.cancel.CancelOrderService;
+import com.example.customer_order.application.order.CreateCustomerOrderService;
 import com.example.customer_order.application.order.DeleteCustomerOrderHandler;
 import com.example.customer_order.application.order.UpdateCustomerOrderHandler;
-import com.example.customer_order.application.payment.PayCustomerOrderHandler;
+import com.example.customer_order.application.payment.PayCustomerOrderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.client.RestClient;
 
 @Configuration
@@ -29,10 +29,10 @@ public class CustomerOrderConfig {
     }
 
     @Bean
-    public CreateCustomerOrderHandler createCustomerOrderHandler(
+    public CreateCustomerOrderService createCustomerOrderHandler(
             CustomerOrderRepositoryPort repositoryPort,
             ProductAvailabilityPort productAvailabilityPort) {
-        return new CreateCustomerOrderHandler(repositoryPort, productAvailabilityPort);
+        return new CreateCustomerOrderService(repositoryPort, productAvailabilityPort);
     }
 
     @Bean
@@ -49,14 +49,19 @@ public class CustomerOrderConfig {
     }
 
     @Bean
-    public PayCustomerOrderHandler createPayCustomerOrderHandler(
-            PayCustomerOrderRepositoryPort repositoryPort, SpringCustomerOrderEventPublisher publisher) {
-        return new PayCustomerOrderHandler(repositoryPort, publisher);
+    public PayCustomerOrderService createPayCustomerOrderService(
+            PayCustomerOrderRepositoryPort repositoryPort, CustomerOrderEventPublisher publisher) {
+        return new PayCustomerOrderService(repositoryPort, publisher);
     }
 
     @Bean
-    public CancelOrderHandler createCancelCustomerOrderHandler(
-            CancelCustomerOrderPort cancelCustomerOrderPort, KafkaTemplate<String, String> kafkaTemplate) {
-        return new CancelOrderHandler(cancelCustomerOrderPort, kafkaTemplate);
+    public CancelOrderService createCancelOrderService(
+            CancelCustomerOrderPort cancelCustomerOrderPort) {
+        return new CancelOrderService(cancelCustomerOrderPort);
+    }
+
+    @Bean
+    public CreateCustomerOrderController createCustomerOrderController(CreateCustomerOrderService service) {
+        return new CreateCustomerOrderController(service);
     }
 }

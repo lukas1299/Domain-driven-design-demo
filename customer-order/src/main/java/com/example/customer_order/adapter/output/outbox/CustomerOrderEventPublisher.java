@@ -3,19 +3,17 @@ package com.example.customer_order.adapter.output.outbox;
 import com.example.common.messaging.order.CustomerOrderKafkaTopics;
 import com.example.common.messaging.order.OrderCreatedEventPayload;
 import com.example.customer_order.domain.model.order.CustomerOrder;
+import lombok.RequiredArgsConstructor;
 import tools.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class SpringCustomerOrderEventPublisher implements ManufacturingEventPublisherPort {
+@RequiredArgsConstructor
+public class CustomerOrderEventPublisher implements ManufacturingEventPublisherPort {
 
     private final OutboxRepository outboxRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
-    public SpringCustomerOrderEventPublisher(OutboxRepository outboxRepository) {
-        this.outboxRepository = outboxRepository;
-    }
 
     @Override
     @Transactional

@@ -1,31 +1,24 @@
 package com.example.customer_order.adapter.input.rest.cancel;
 
 import com.example.customer_order.application.cancel.CancelOrderCommand;
-import com.example.customer_order.application.cancel.CancelOrderHandler;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.customer_order.application.cancel.CancelOrderService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/orders")
+@RequiredArgsConstructor
 public class CancelOrderController {
 
-    public final CancelOrderHandler cancelOrderHandler;
-
-    public CancelOrderController(CancelOrderHandler cancelOrderHandler) {
-        this.cancelOrderHandler = cancelOrderHandler;
-    }
+    public final CancelOrderService cancelOrderService;
 
     @PostMapping("/{orderId}/cancel")
-    public ResponseEntity<Void> handleCancel(@PathVariable("orderId") UUID orderId){
+    @ResponseStatus(code = HttpStatus.OK)
+    public void handleCancel(@PathVariable("orderId") UUID orderId) {
         CancelOrderCommand command = new CancelOrderCommand(orderId);
-
-        cancelOrderHandler.handle(command);
-        return ResponseEntity.ok().build();
+        cancelOrderService.handle(command);
     }
 }

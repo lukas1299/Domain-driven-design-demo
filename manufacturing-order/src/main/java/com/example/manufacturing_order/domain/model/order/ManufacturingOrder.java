@@ -1,8 +1,16 @@
 package com.example.manufacturing_order.domain.model.order;
 
+import com.example.common.validator.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import java.util.UUID;
 
+@AllArgsConstructor
+@Setter
+@Getter
 public class ManufacturingOrder {
     private final ManufacturingOrderId id;
     private final String sourceOrderId;
@@ -11,40 +19,25 @@ public class ManufacturingOrder {
     private final List<MaterialRequirement> materialRequirements;
     private ManufacturingStatus status;
 
-    private ManufacturingOrder(
-            ManufacturingOrderId id,
-            String sourceOrderId,
-            String productSku,
-            int quantity,
-            List<MaterialRequirement> materialRequirements,
-            ManufacturingStatus status
-    ) {
-        this.id = id;
-        this.sourceOrderId = sourceOrderId;
-        this.productSku = productSku;
-        this.quantity = quantity;
-        this.materialRequirements = List.copyOf(materialRequirements);
-        this.status = status;
-    }
-
     public static ManufacturingOrder createNew(
             String sourceOrderId,
             String productSku,
             int quantity,
             List<MaterialRequirement> materialRequirements
     ) {
-        if (sourceOrderId == null) {
-            throw new IllegalArgumentException("Identyfikator źródłowy zamówienia nie może być pusty.");
-        }
-        if (productSku == null || productSku.isBlank()) {
-            throw new IllegalArgumentException("SKU produktu musi być określone dla produkcji.");
-        }
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Ilość produkcyjna musi być większa od zera.");
-        }
-        if (materialRequirements == null || materialRequirements.isEmpty()) {
-            throw new IllegalArgumentException("Zlecenie produkcyjne musi zawierać wymagania materiałowe.");
-        }
+
+        ValidateNotNullSourceOrderIdRule validateNotNullSourceOrderIdRule = new ValidateNotNullSourceOrderIdRule(sourceOrderId);
+        ValidateSubProductsRule validateSubProductsRule = new ValidateSubProductsRule(productSku);
+        ValidateQuantityRule validateQuantityRule = new ValidateQuantityRule(quantity);
+        ValidateRequirementsRule validateRequirementsRule = new ValidateRequirementsRule(materialRequirements);
+
+        ManufacturingOrderValidator validator = new ManufacturingOrderValidator(
+                List.of(validateNotNullSourceOrderIdRule,
+                        validateSubProductsRule,
+                        validateQuantityRule,
+                        validateRequirementsRule));
+        validator.verify();
+
         return new ManufacturingOrder(
                 ManufacturingOrderId.generate(),
                 sourceOrderId,
@@ -101,10 +94,27 @@ public class ManufacturingOrder {
         this.status = ManufacturingStatus.NOTIFIED;
     }
 
-    public ManufacturingOrderId getId() { return id; }
-    public String getSourceOrderId() { return sourceOrderId; }
-    public String getProductSku() { return productSku; }
-    public int getQuantity() { return quantity; }
-    public List<MaterialRequirement> getMaterialRequirements() { return materialRequirements; }
-    public ManufacturingStatus getStatus() { return status; }
+    public ManufacturingOrderId getId() {
+        return id;
+    }
+
+    public String getSourceOrderId() {
+        return sourceOrderId;
+    }
+
+    public String getProductSku() {
+        return productSku;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public List<MaterialRequirement> getMaterialRequirements() {
+        return materialRequirements;
+    }
+
+    public ManufacturingStatus getStatus() {
+        return status;
+    }
 }

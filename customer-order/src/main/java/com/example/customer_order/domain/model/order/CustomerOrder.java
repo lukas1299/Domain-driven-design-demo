@@ -2,12 +2,17 @@ package com.example.customer_order.domain.model.order;
 
 import com.example.customer_order.adapter.output.messaging.payment.CustomerOrderPaidDomainEvent;
 import com.example.customer_order.domain.model.order.exception.InvalidOrderStatusException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class CustomerOrder {
     private final OrderId id;
     private final String customerId;
@@ -17,20 +22,12 @@ public class CustomerOrder {
 
     private final List<Object> domainEvents = new ArrayList<>();
 
-    public CustomerOrder(OrderId id, String customerId, String productSku, int quantity, OrderStatus status) {
-        this.id = id;
-        this.customerId = customerId;
-        this.productSku = productSku;
-        this.quantity = quantity;
-        this.status = status;
-    }
-
-    public static CustomerOrder createNew(OrderId orderId, String customerId, String productSku, int quantity) {
+    public static CustomerOrder createNew(String customerId, String productSku, int quantity) {
         if (quantity <= 0) throw new IllegalArgumentException("Quantity must be greater than zero");
         return new CustomerOrder(OrderId.generate(), customerId, productSku, quantity, OrderStatus.PLACED);
     }
 
-    public static CustomerOrder reconstruct(OrderId orderId, String customerId, String productSku, int quantity, OrderStatus status) {
+    public static CustomerOrder of(OrderId orderId, String customerId, String productSku, int quantity, OrderStatus status) {
         return new CustomerOrder(orderId, customerId, productSku, quantity, status);
     }
 
@@ -75,33 +72,7 @@ public class CustomerOrder {
         this.status = OrderStatus.CANCEL;
     }
 
-    public OrderId getId() {
-        return id;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public String getProductSku() {
-        return productSku;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public List<Object> getDomainEvents() {
-        return Collections.unmodifiableList(domainEvents);
-    }
-
     public void clearDomainEvents() {
         this.domainEvents.clear();
     }
-
-
 }

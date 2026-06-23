@@ -1,4 +1,4 @@
-package com.example.manufacturing_order.domain.model.bom;
+package com.example.manufacturing_order.domain.model.billOfMaterials;
 
 import com.example.manufacturing_order.domain.model.order.MaterialRequirement;
 import org.junit.jupiter.api.Test;

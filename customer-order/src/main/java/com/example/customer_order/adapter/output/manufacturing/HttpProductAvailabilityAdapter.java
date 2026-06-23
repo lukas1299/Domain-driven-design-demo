@@ -19,7 +19,7 @@ public class HttpProductAvailabilityAdapter implements ProductAvailabilityPort {
     public boolean isProductAvailable(String productSku) {
         try {
             ProductAvailabilityResponse response = restClient.get()
-                    .uri("/api/products/{sku}/availability", productSku)
+                    .uri("/v1/products/{sku}/availability", productSku)
                     .retrieve()
                     .body(ProductAvailabilityResponse.class);
 

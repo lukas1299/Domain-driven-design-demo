@@ -73,7 +73,7 @@ class UpdateCustomerOrderHandlerTest {
     }
 
     private CustomerOrder placedOrder(UUID orderId) {
-        return CustomerOrder.reconstruct(
+        return CustomerOrder.of(
                 OrderId.of(orderId),
                 UUID.randomUUID().toString(),
                 "SKU-1",

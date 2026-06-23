@@ -24,9 +24,7 @@ public class UpdateCustomerOrderController {
             @RequestBody UpdateOrderRequest request) {
 
         var command = new UpdateCustomerOrderCommand(orderId, request.productSku(), request.quantity());
-
         CustomerOrder order = handler.handle(command);
-
         return ResponseEntity.ok(new CustomerOrderResponse(
                 order.getId().value().toString(),
                 order.getStatus().name()

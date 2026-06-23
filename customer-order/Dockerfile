@@ -1,6 +1,4 @@
-# Build from repository root:
-#   docker build -f customer-order/Dockerfile -t customer-order .
-FROM maven:3.9-eclipse-temurin-17-alpine AS build
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
 
 COPY . .
@@ -8,7 +6,7 @@ COPY . .
 RUN mvn -f common/pom.xml install -DskipTests -B -q && \
     mvn -f customer-order/pom.xml package -DskipTests -B -q
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 RUN addgroup -S spring && adduser -S spring -G spring

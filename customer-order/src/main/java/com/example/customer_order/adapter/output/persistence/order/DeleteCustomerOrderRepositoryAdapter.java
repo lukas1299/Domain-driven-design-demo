@@ -11,16 +11,16 @@ import java.util.UUID;
 @Repository
 public class DeleteCustomerOrderRepositoryAdapter implements DeleteCustomerOrderRepositoryPort {
 
-    private final SpringDataCustomerOrderRepository springDataRepository;
+    private final CustomerOrderRepository customerOrderRepository;
 
-    public DeleteCustomerOrderRepositoryAdapter(SpringDataCustomerOrderRepository springDataRepository) {
-        this.springDataRepository = springDataRepository;
+    public DeleteCustomerOrderRepositoryAdapter(CustomerOrderRepository customerOrderRepository) {
+        this.customerOrderRepository = customerOrderRepository;
     }
 
     @Override
     public Optional<CustomerOrder> findById(UUID id) {
-        return springDataRepository.findById(id)
-                .map(entity -> CustomerOrder.reconstruct(
+        return customerOrderRepository.findById(id)
+                .map(entity -> CustomerOrder.of(
                         OrderId.of(entity.getId()),
                         entity.getCustomerId(),
                         entity.getProductSku(),
@@ -31,6 +31,6 @@ public class DeleteCustomerOrderRepositoryAdapter implements DeleteCustomerOrder
 
     @Override
     public void delete(CustomerOrder order) {
-        springDataRepository.deleteById(order.getId().value());
+        customerOrderRepository.deleteById(order.getId().value());
     }
 }

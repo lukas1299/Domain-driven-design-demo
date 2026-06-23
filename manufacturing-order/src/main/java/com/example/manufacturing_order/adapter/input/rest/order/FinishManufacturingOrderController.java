@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/manufacturing-orders")
+@RequestMapping("/v1/manufacturing-orders")
 public class FinishManufacturingOrderController {
 
     private final FinishManufacturingOrderHandler handler;

@@ -2,6 +2,8 @@ package com.example.manufacturing_order.config;
 
 import com.example.manufacturing_order.adapter.output.persistence.bom.ProductBomLineEntity;
 import com.example.manufacturing_order.adapter.output.persistence.bom.SpringDataProductBomLineRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -12,14 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class BomDataInitializer implements ApplicationRunner {
-    private static final Logger log = LoggerFactory.getLogger(BomDataInitializer.class);
-
     private final SpringDataProductBomLineRepository bomLineRepository;
-
-    public BomDataInitializer(SpringDataProductBomLineRepository bomLineRepository) {
-        this.bomLineRepository = bomLineRepository;
-    }
 
     @Override
     @Transactional

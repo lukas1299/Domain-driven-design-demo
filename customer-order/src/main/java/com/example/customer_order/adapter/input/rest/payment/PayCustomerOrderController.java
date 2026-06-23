@@ -1,7 +1,7 @@
 package com.example.customer_order.adapter.input.rest.payment;
 
 import com.example.customer_order.application.payment.PayCustomerOrderCommand;
-import com.example.customer_order.application.payment.PayCustomerOrderHandler;
+import com.example.customer_order.application.payment.PayCustomerOrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
@@ -10,19 +10,16 @@ import java.util.UUID;
 @RequestMapping("/api/orders")
 public class PayCustomerOrderController {
 
-    private final PayCustomerOrderHandler handler;
+    private final PayCustomerOrderService service;
 
-    public PayCustomerOrderController(PayCustomerOrderHandler handler) {
-        this.handler = handler;
+    public PayCustomerOrderController(PayCustomerOrderService service) {
+        this.service = service;
     }
 
     @PostMapping("/{orderId}/pay")
     public ResponseEntity<Void> handlePayment(@PathVariable UUID orderId) {
-
         var command = new PayCustomerOrderCommand(orderId);
-
-        handler.handle(command);
-
+        service.handle(command);
         return ResponseEntity.ok().build();
     }
 }

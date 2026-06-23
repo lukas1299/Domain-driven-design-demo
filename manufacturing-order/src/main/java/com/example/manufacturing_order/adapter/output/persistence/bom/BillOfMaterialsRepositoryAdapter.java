@@ -1,17 +1,15 @@
 package com.example.manufacturing_order.adapter.output.persistence.bom;
 
-import com.example.manufacturing_order.domain.model.bom.BillOfMaterials;
-import com.example.manufacturing_order.domain.model.bom.BomLine;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BillOfMaterials;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BomLine;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class BillOfMaterialsRepositoryAdapter implements BillOfMaterialsRepositoryPort {
     private final SpringDataProductBomLineRepository repository;
-
-    public BillOfMaterialsRepositoryAdapter(SpringDataProductBomLineRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Optional<BillOfMaterials> findByProductSku(String productSku) {

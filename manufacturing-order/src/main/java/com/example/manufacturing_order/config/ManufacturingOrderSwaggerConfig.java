@@ -30,7 +30,7 @@ public class ManufacturingOrderSwaggerConfig {
     public GroupedOpenApi customerOrderGroupApi() {
         return GroupedOpenApi.builder()
                 .group("manufacturing-order")
-                .pathsToMatch("/api/manufacturing-orders/**", "/api/products/**")
+                .pathsToMatch("/v1/manufacturing-orders/**", "/v1/products/**")
                 .build();
     }
 }

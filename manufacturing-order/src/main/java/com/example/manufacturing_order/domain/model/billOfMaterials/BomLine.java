@@ -1,8 +1,10 @@
-package com.example.manufacturing_order.domain.model.bom;
+package com.example.manufacturing_order.domain.model.billOfMaterials;
+
+import org.apache.commons.lang3.StringUtils;
 
 public record BomLine(String semiProductSku, int quantityPerUnit) {
     public BomLine {
-        if (semiProductSku == null || semiProductSku.isBlank()) {
+        if (StringUtils.isBlank(semiProductSku)) {
             throw new IllegalArgumentException("SKU półproduktu musi być określone.");
         }
         if (quantityPerUnit <= 0) {

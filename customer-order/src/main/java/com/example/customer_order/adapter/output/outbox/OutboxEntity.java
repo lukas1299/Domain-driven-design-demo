@@ -10,19 +10,14 @@ public class OutboxEntity {
 
     @Id
     private UUID id;
-
     @Column(name = "aggregate_id", nullable = false)
     private String aggregateId;
-
     @Column(name = "topic", nullable = false)
     private String topic;
-
     @Column(name = "payload", nullable = false, columnDefinition = "TEXT")
     private String payload;
-
     @Column(name = "processed", nullable = false)
     private boolean processed;
-
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

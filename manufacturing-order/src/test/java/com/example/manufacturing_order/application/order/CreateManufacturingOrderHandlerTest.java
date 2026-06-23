@@ -2,9 +2,9 @@ package com.example.manufacturing_order.application.order;
 
 import com.example.manufacturing_order.adapter.output.persistence.bom.BillOfMaterialsRepositoryPort;
 import com.example.manufacturing_order.adapter.output.persistence.order.ManufacturingOrderRepositoryPort;
-import com.example.manufacturing_order.domain.model.bom.BillOfMaterials;
-import com.example.manufacturing_order.domain.model.bom.BillOfMaterialsNotFoundException;
-import com.example.manufacturing_order.domain.model.bom.BomLine;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BillOfMaterials;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BillOfMaterialsNotFoundException;
+import com.example.manufacturing_order.domain.model.billOfMaterials.BomLine;
 import com.example.manufacturing_order.domain.model.order.ManufacturingOrder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ class CreateManufacturingOrderHandlerTest {
     private BillOfMaterialsRepositoryPort billOfMaterialsRepositoryPort;
 
     @InjectMocks
-    private CreateManufacturingOrderHandler handler;
+    private CreateManufacturingOrderService service;
 
     @Test
     void handle_shouldCreateManufacturingOrder() {
@@ -44,7 +44,7 @@ class CreateManufacturingOrderHandlerTest {
         when(repositoryPort.findBySourceOrderId("order-1")).thenReturn(Optional.empty());
         when(billOfMaterialsRepositoryPort.findByProductSku("PRODUCT-1")).thenReturn(Optional.of(bom));
 
-        handler.handle(command);
+        service.handle(command);
 
         ArgumentCaptor<ManufacturingOrder> captor = ArgumentCaptor.forClass(ManufacturingOrder.class);
         verify(repositoryPort).save(captor.capture());
@@ -58,7 +58,7 @@ class CreateManufacturingOrderHandlerTest {
         when(repositoryPort.findBySourceOrderId("order-1")).thenReturn(Optional.empty());
         when(billOfMaterialsRepositoryPort.findByProductSku("PRODUCT-1")).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> handler.handle(new CreateManufacturingOrderCommand("order-1", "PRODUCT-1", 2)))
+        assertThatThrownBy(() -> service.handle(new CreateManufacturingOrderCommand("order-1", "PRODUCT-1", 2)))
                 .isInstanceOf(BillOfMaterialsNotFoundException.class);
 
         verify(repositoryPort, never()).save(any());

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/v1/products")
 public class ProductAvailabilityController {
 
     private final CheckProductAvailabilityPort checkProductAvailabilityPort;
@@ -19,6 +19,6 @@ public class ProductAvailabilityController {
 
     @GetMapping("/{productSku}/availability")
     public ProductAvailabilityResponse checkAvailability(@PathVariable String productSku) {
-        return checkProductAvailabilityPort.check(productSku);
+        return checkProductAvailabilityPort.checkSubProductsAvailability(productSku);
     }
 }
