@@ -1,54 +1,54 @@
 version: '3.8'
 
 services:
-  customer-order:
-    build:
-      context: .
-      dockerfile: customer-order/Dockerfile
-    container_name: customer_order_app
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-order-db:5432/customer_order_db
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-      MANUFACTURING_BASE_URL: http://manufacturing-order:8082
-    depends_on:
-      - customer-order-db
-      - kafka
-      - manufacturing-order
-    restart: unless-stopped
-
-  manufacturing-order:
-    build:
-      context: .
-      dockerfile: manufacturing-order/Dockerfile
-    container_name: manufacturing_order_app
-    ports:
-      - "8082:8082"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://manufacturing-order-db:5432/manufacturing_order_db
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-    depends_on:
-      - manufacturing-order-db
-      - kafka
-    restart: unless-stopped
-
-  worker:
-    build:
-      context: .
-      dockerfile: worker/Dockerfile
-    container_name: worker_app
-    ports:
-      - "8083:8083"
-    environment:
-      MANUFACTURING_BASE_URL: http://manufacturing-order:8082
-    depends_on:
-      - manufacturing-order
-    restart: unless-stopped
+#  customer-order:
+#    build:
+#      context: .
+#      dockerfile: customer-order/Dockerfile
+#    container_name: customer_order
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://customer-order-db:5432/customer_order_db
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+#      MANUFACTURING_BASE_URL: http://manufacturing-order:8082
+#    depends_on:
+#      - customer-order-db
+#      - kafka
+#      - manufacturing-order
+#    restart: unless-stopped
+#
+#  manufacturing-order:
+#    build:
+#      context: .
+#      dockerfile: manufacturing-order/Dockerfile
+#    container_name: manufacturing_order
+#    ports:
+#      - "8082:8082"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://manufacturing-order-db:5432/manufacturing_order_db
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+#    depends_on:
+#      - manufacturing-order-db
+#      - kafka
+#    restart: unless-stopped
+#
+#  worker:
+#    build:
+#      context: .
+#      dockerfile: worker/Dockerfile
+#    container_name: worker
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      MANUFACTURING_BASE_URL: http://manufacturing-order:8082
+#    depends_on:
+#      - manufacturing-order
+#    restart: unless-stopped
 
   kafka:
     image: confluentinc/cp-kafka:7.6.0
-    container_name: kafka_broker
+    container_name: kafka
     ports:
       - "9092:9092"
     environment:
@@ -68,9 +68,9 @@ services:
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
   customer-order-db:
     image: postgres:16-alpine
-    container_name: pg_basa_customer
+    container_name: pg_customer
     ports:
-      - "5455:5432" # Nowy, bezpieczny port dla Zamówień
+      - "5455:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -81,9 +81,9 @@ services:
 
   manufacturing-order-db:
     image: postgres:16-alpine
-    container_name: pg_basa_manuf
+    container_name: pg_manuf
     ports:
-      - "5466:5432" # Nowy, bezpieczny port dla Produkcji
+      - "5466:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

@@ -11,16 +11,12 @@
     <option name="ignoredFiles">
       <set>
         <option value="$USER_HOME$/Downloads/manufacturing-order/untitled/pom.xml" />
-        <option value="$PROJECT_DIR$/common/pom.xml" />
-        <option value="$PROJECT_DIR$/customer-order/pom.xml" />
         <option value="$PROJECT_DIR$/customerorder/pom.xml" />
-        <option value="$PROJECT_DIR$/manufacturing-order/pom.xml" />
         <option value="$PROJECT_DIR$/manufacturingorder/pom.xml" />
-        <option value="$PROJECT_DIR$/worker/pom.xml" />
       </set>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" default="true" project-jdk-name="temurin-25" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
